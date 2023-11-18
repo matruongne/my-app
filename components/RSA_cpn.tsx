@@ -17,31 +17,40 @@ const RSA_cpn = () => {
 	const [EncodeKey, setEncodeKey] = useState('')
 	const [DecodeKey, setDecodeKey] = useState('')
 
+	const [EncodeResult, setEncodeResult] = useState('')
+	const [DecodeResult, setDecodeResult] = useState('')
+
 	const data = ['Public key', 'Private Key']
 
 	const handleClick = () => {
 		axios.get('http://localhost:3000/api').then((data) => {
-			setPr(
-				data.data.privateKey
-					.replace(/-----BEGIN PRIVATE KEY-----/, '')
-					.replace(/-----END PRIVATE KEY-----/, '')
-					.trim()
-			)
-			setPu(
-				data.data.publicKey
-					.replace(/-----BEGIN PUBLIC KEY-----/, '')
-					.replace(/-----END PUBLIC KEY-----/, '')
-					.trim()
-			)
+			setPr(data.data.privateKey)
+			setPu(data.data.publicKey)
 		})
 	}
-	console.log('pri :', privateKey)
-	console.log('pub :', publicKey)
-	console.log('enc :', Encode)
-	console.log('valueRadioEnc :', valueRadioEnc)
-	console.log('valueRadioDec :', valueRadioDec)
-	console.log('EncodeKey :', EncodeKey)
-	console.log('DecodeKey :', DecodeKey)
+	const handleClickEnc = () => {
+		axios
+			.post('http://localhost:3000/api/result', {
+				message: valueRadioEnc,
+				text: Encode,
+				Key: EncodeKey,
+			})
+			.then((data) => {
+				setEncodeResult(data.data)
+			})
+	}
+	const handleClickDec = () => {
+		axios
+			.post('http://localhost:3000/api/resultdec', {
+				message: valueRadioDec,
+				text: Decode,
+				Key: DecodeKey,
+			})
+			.then((data) => {
+				setDecodeResult(data.data)
+			})
+	}
+
 	return (
 		<div>
 			<div className="flex w-full">
@@ -80,7 +89,7 @@ const RSA_cpn = () => {
 							placeholder="Nhập văn bản thuần túy để mã hóa..."
 							value={Encode}
 							setValue={setEncode}
-							className="whitespace-pre "
+							className="whitespace-pre-wrap "
 						/>
 						<Textarea
 							label="Enter Public/Private key"
@@ -88,7 +97,7 @@ const RSA_cpn = () => {
 							placeholder="Enter Public/Private key"
 							value={EncodeKey}
 							setValue={setEncodeKey}
-							className="whitespace-pre "
+							className="whitespace-pre-wrap "
 						/>
 						<ControlledRadioButtonsGroup
 							label="RSA Key Type:"
@@ -97,20 +106,28 @@ const RSA_cpn = () => {
 							data={data}
 						/>
 						<button
-							className="relative top-32 left-28 min-w-[200px] bg-blue-600 p-3 rounded-lg font-mono text-xl text-white"
-							onClick={handleClick}
+							className="relative top-32 left-28 min-w-[200px] bg-blue-600 p-3 mb-36 rounded-lg font-mono text-xl text-white"
+							onClick={handleClickEnc}
 							type="button"
 						>
 							Encrypt
 						</button>
+						<Textarea
+							label="Encrypted Output: "
+							id="resultEnc"
+							placeholder="Hiển thị kết quả..."
+							value={EncodeResult}
+							className="whitespace-pre-wrap"
+							disabled
+						/>
 					</div>
 					<div className="w-full">
 						<Textarea
-							label="Enter Encrypted Text to Decrypt (Base64)"
+							label="Enter Encrypted Text to Decrypt"
 							id="Decrypt"
 							placeholder="Nhập văn bản được mã hóa để giải mã..."
 							value={Decode}
-							className="whitespace-pre "
+							className="whitespace-pre-wrap "
 							setValue={setDecode}
 						/>
 						<Textarea
@@ -119,7 +136,7 @@ const RSA_cpn = () => {
 							placeholder="Enter Public/Private key"
 							value={DecodeKey}
 							setValue={setDecodeKey}
-							className="whitespace-pre "
+							className="whitespace-pre-wrap "
 						/>
 						<ControlledRadioButtonsGroup
 							label="RSA Key Type:"
@@ -128,12 +145,20 @@ const RSA_cpn = () => {
 							data={data}
 						/>
 						<button
-							className="relative top-32 left-28 min-w-[200px] bg-red-600 p-3 rounded-lg font-mono text-xl text-white"
-							onClick={handleClick}
+							className="relative top-32 left-28 min-w-[200px] bg-red-600 p-3 mb-36 rounded-lg font-mono text-xl text-white"
+							onClick={handleClickDec}
 							type="button"
 						>
 							Decrypt
 						</button>
+						<Textarea
+							label="Decrypted Output: "
+							id="resultDec"
+							placeholder="Hiển thị kết quả..."
+							value={DecodeResult}
+							className="whitespace-pre-wrap"
+							disabled
+						/>
 					</div>
 				</div>
 			</div>
