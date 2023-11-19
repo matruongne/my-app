@@ -23,6 +23,10 @@ export const Textarea: React.FC<TextareaProps> = ({
 	setValue,
 	value,
 }) => {
+	const handleClick = (abc: any) => {
+		if (setValue) return setValue(abc)
+	}
+
 	return (
 		<div className="w-full p-2">
 			<label htmlFor={id} className="text-lg font-semibold leading-6 text-gray-900">
@@ -60,7 +64,7 @@ export const Textarea: React.FC<TextareaProps> = ({
                     `,
 						disabled && 'cursor-default'
 					)}
-					onChange={(e) => setValue(e.target.value)}
+					onChange={(e) => handleClick(e.target.value)}
 				/>
 			</div>
 		</div>
