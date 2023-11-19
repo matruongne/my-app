@@ -23,14 +23,14 @@ const RSA_cpn = () => {
 	const data = ['Public key', 'Private Key']
 
 	const handleClick = () => {
-		axios.get('http://localhost:3000/api').then((data) => {
+		axios.get('https://my-app-k78l.vercel.app/api').then((data) => {
 			setPr(data.data.privateKey)
 			setPu(data.data.publicKey)
 		})
 	}
 	const handleClickEnc = () => {
 		axios
-			.post('http://localhost:3000/api/result', {
+			.post('https://my-app-k78l.vercel.app/result', {
 				message: valueRadioEnc,
 				text: Encode,
 				Key: EncodeKey,
@@ -41,7 +41,7 @@ const RSA_cpn = () => {
 	}
 	const handleClickDec = () => {
 		axios
-			.post('http://localhost:3000/api/resultdec', {
+			.post('https://my-app-k78l.vercel.app/resultdec', {
 				message: valueRadioDec,
 				text: Decode,
 				Key: DecodeKey,
